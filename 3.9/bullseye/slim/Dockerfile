@@ -31,6 +31,7 @@ RUN set -ex \
 	&& savedAptMark="$(apt-mark showmanual)" \
 	&& apt-get update && apt-get install -y --no-install-recommends \
 		dpkg-dev \
+		systemtap-sdt-dev \
 		gcc \
 		libbluetooth-dev \
 		libbz2-dev \
@@ -74,8 +75,9 @@ RUN set -ex \
 		--with-system-expat \
 		--with-system-ffi \
 		--without-ensurepip \
+		--with-pydebug \
 	&& make -j "$(nproc)" \
-		LDFLAGS="-Wl,--strip-all" \
+		EXTRA_CFLAGS="-DPy_REF_DEBUG -DPy_DEBUG" \
 	&& make install \
 	&& rm -rf /usr/src/python \
 	\
